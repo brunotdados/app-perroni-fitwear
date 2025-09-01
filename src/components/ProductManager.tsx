@@ -62,13 +62,25 @@ export function ProductManager() {
     setIsSending(true);
 
     const WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL as string | undefined;
-    const TOKEN = import.meta.env.VITE_N8N_TOKEN as string | undefined;
+
+    console.log("WEBHOOK_URL:", WEBHOOK_URL);
+    console.log("Qtd produtos:", products?.length);
 
     if (!WEBHOOK_URL) {
       setIsSending(false);
       toast({
         title: "Falha ao enviar",
-        description: "URL do webhook não configurada (VITE_N8N_WEBHOOK_URL).",
+        description: "VITE_N8N_WEBHOOK_URL não definida no .env",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!products || products.length === 0) {
+      setIsSending(false);
+      toast({
+        title: "Nada para enviar",
+        description: "Cadastre pelo menos 1 produto antes de salvar.",
         variant: "destructive",
       });
       return;
@@ -83,24 +95,20 @@ export function ProductManager() {
     try {
       const resp = await fetch(WEBHOOK_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {}),
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-      if (!resp.ok) {
-        const texto = await resp.text();
-        throw new Error(`HTTP ${resp.status} - ${texto}`);
-      }
+      const text = await resp.text(); // ajuda a debugar erros
+      if (!resp.ok) throw new Error(`HTTP ${resp.status} - ${text}`);
 
       setIsSaved(true);
       toast({
         title: "Produtos enviados!",
-        description: `${products.length} produto(s) foram enviados ao fluxo do n8n.`,
+        description: `${products.length} produto(s) foram enviados ao n8n.`,
       });
     } catch (err: any) {
+      console.error(err);
       toast({
         title: "Erro ao enviar ao n8n",
         description: String(err?.message ?? err),
@@ -110,6 +118,7 @@ export function ProductManager() {
       setIsSending(false);
     }
   };
+
 
   // 🔽 o return precisa estar DENTRO do componente
   return (
