@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Perroni Fitwear Design System - Fitness-focused colors and gradients */
+
+@layer base {
+  :root {
+    /* Base colors - Clean and modern */
+    --background: 0 0% 100%;
+    --foreground: 220 8.9% 8.2%;
+
+    /* Card styling */
+    --card: 0 0% 100%;
+    --card-foreground: 220 8.9% 8.2%;
+
+    /* Popover styling */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 8.9% 8.2%;
+
+    /* Primary - Energetic orange/red gradient */
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 0% 20%;
+
+    /* Secondary - Cool blue accent */
+    --secondary: 213 94% 68%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted elements */
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    /* Accent - Electric purple */
+    --accent: 262 90% 68%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Success - Fitness green */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Form elements */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 0 0% 0%;
+
+    /* Design elements */
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--accent)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100% / 0.1), hsl(0 0% 100% / 0.05));
+
+    /* Shadows */
+    --shadow-primary: 0 10px 40px -10px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(220 8.9% 8.2% / 0.1);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Base colors */
+    --background: 220 8.9% 8.2%;
+    --foreground: 0 0% 100%;
+
+    /* Card styling */
+    --card: 220 8.9% 8.2%;
+    --card-foreground: 0 0% 100%;
+
+    /* Popover styling */
+    --popover: 220 8.9% 8.2%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Primary - Energetic orange/red gradient */
+    --primary: 0 0% 100%;
+    --primary-foreground: 220 8.9% 8.2%;
+    --primary-glow: 0 0% 60%;
+
+    /* Secondary - Cool blue accent */
+    --secondary: 213 94% 68%;
+    --secondary-foreground: 220 8.9% 8.2%;
+
+    /* Muted elements */
+    --muted: 220 8.9% 15%;
+    --muted-foreground: 220 8.9% 65%;
+
+    /* Accent - Electric purple */
+    --accent: 262 90% 68%;
+    --accent-foreground: 220 8.9% 8.2%;
+
+    /* Success - Fitness green */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Form elements */
+    --border: 220 8.9% 20%;
+    --input: 220 8.9% 20%;
+    --ring: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
