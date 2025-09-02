@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import React from "react";
 
 interface ProductVariation {
   nome: string;
@@ -6,6 +6,7 @@ interface ProductVariation {
 }
 
 interface Product {
+  _localId?: string;
   id?: string;
   identificadorUrl: string;
   nome: string;
@@ -29,87 +30,106 @@ interface Product {
   marca: string;
   produtoFisico: boolean;
   mpn: string;
-  sexo: 'Feminino' | 'Masculino' | '';
+  sexo: "Feminino" | "Masculino" | "";
   faixaEtaria: string;
   custo: number;
 }
 
-interface ProductTableProps {
+type ProductTableProps = {
   products: Product[];
-}
+  selectable?: boolean;
+  selectedIds?: Set<string>;
+  onToggleSelect?: (id: string) => void;
+  getRowId?: (p: Product) => string;
+};
 
-export function ProductTable({ products }: ProductTableProps) {
-  if (products.length === 0) {
-    return (
-      <div className="text-center py-8 text-muted-foreground">
-        Nenhum produto cadastrado ainda
-      </div>
-    );
-  }
-
+export function ProductTable({
+  products,
+  selectable = false,
+  selectedIds = new Set(),
+  onToggleSelect,
+  getRowId = (p) => (p as any)._localId ?? (p as any).sku,
+}: ProductTableProps) {
   return (
-    <div className="rounded-md border overflow-x-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>identificadorUrl</TableHead>
-            <TableHead>Nome</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>SKU</TableHead>
-            <TableHead>Variações</TableHead>
-            <TableHead>Preço</TableHead>
-            <TableHead>Preço Promoção</TableHead>
-            <TableHead>Estoque</TableHead>
-            <TableHead>Marca</TableHead>
-            <TableHead>Sexo</TableHead>
-            <TableHead>Exibir Loja</TableHead>
-            <TableHead>Frete Grátis</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {products.map((product, index) => (
-            <TableRow key={product.id || index}>
-              <TableCell className="font-medium">{product.nome}</TableCell>
-              <TableCell>{product.categoria}</TableCell>
-              <TableCell className="font-mono text-sm">{product.sku}</TableCell>
-              <TableCell>
-                {product.variacoes.length > 0 ? (
-                  <div className="space-y-1">
-                    {product.variacoes.map((variacao, idx) => (
-                      <div key={idx} className="text-xs">
-                        <span className="font-medium">{variacao.nome}:</span> {variacao.valor}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="text-muted-foreground">-</span>
+    <div className="overflow-x-auto">
+      <table className="w-full text-sm border">
+        <thead>
+          <tr className="text-left bg-muted">
+            {selectable && <th className="w-28">Selecionar</th>}
+            <th>SKU</th>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Preço Promoção</th>
+            <th>Estoque</th>
+            <th>Código de Barras</th>
+            <th>Identificador URL</th>
+            <th>Marca</th>
+            <th>Sexo</th>
+            <th>Faixa Etária</th>
+            <th>Custo</th>
+            <th>Peso</th>
+            <th>Altura</th>
+            <th>Largura</th>
+            <th>Comprimento</th>
+            <th>Exibir na Loja</th>
+            <th>Frete Grátis</th>
+            <th>Produto Físico</th>
+            <th>MPN</th>
+            <th>Variações</th>
+            <th>Descrição</th>
+            <th>Tags</th>
+            <th>Título SEO</th>
+            <th>Descrição SEO</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((p) => {
+            const id = getRowId(p);
+            const checked = selectedIds.has(id);
+
+            return (
+              <tr key={id} className="border-t">
+                {selectable && (
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => onToggleSelect?.(id)}
+                      title="Selecionar produto"
+                    />
+                  </td>
                 )}
-              </TableCell>
-              <TableCell>R$ {product.preco.toFixed(2)}</TableCell>
-              <TableCell className="text-green-600">R$ {product.precoPromocao.toFixed(2)}</TableCell>
-              <TableCell>{product.estoque}</TableCell>
-              <TableCell>{product.marca}</TableCell>
-              <TableCell>{product.sexo || '-'}</TableCell>
-              <TableCell>
-                <span className={`px-2 py-1 rounded-full text-xs ${product.exibirLoja
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                  }`}>
-                  {product.exibirLoja ? 'SIM' : 'NÃO'}
-                </span>
-              </TableCell>
-              <TableCell>
-                <span className={`px-2 py-1 rounded-full text-xs ${product.freteGratis
-                  ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
-                  }`}>
-                  {product.freteGratis ? 'SIM' : 'NÃO'}
-                </span>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                <td>{p.sku}</td>
+                <td>{p.nome}</td>
+                <td>{p.categoria}</td>
+                <td>{p.preco?.toFixed?.(2)}</td>
+                <td>{p.precoPromocao?.toFixed?.(2)}</td>
+                <td>{p.estoque}</td>
+                <td>{p.codigoBarras}</td>
+                <td>{p.identificadorUrl}</td>
+                <td>{p.marca}</td>
+                <td>{p.sexo}</td>
+                <td>{p.faixaEtaria}</td>
+                <td>{p.custo?.toFixed?.(2)}</td>
+                <td>{p.peso}</td>
+                <td>{p.altura}</td>
+                <td>{p.largura}</td>
+                <td>{p.comprimento}</td>
+                <td>{p.exibirLoja ? "Sim" : "Não"}</td>
+                <td>{p.freteGratis ? "Sim" : "Não"}</td>
+                <td>{p.produtoFisico ? "Sim" : "Não"}</td>
+                <td>{p.mpn}</td>
+                <td>{p.variacoes?.map((v) => `${v.nome}: ${v.valor}`).join(", ")}</td>
+                <td>{p.descricao}</td>
+                <td>{p.tags}</td>
+                <td>{p.tituloSeo}</td>
+                <td>{p.descricaoSeo}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
